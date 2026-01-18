@@ -1,7 +1,17 @@
-from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QCalendarWidget, QSpinBox, QTextEdit, QPushButton, QTableWidget, QHeaderView, QGroupBox, QStackedWidget, QRadioButton)
-
-from PyQt6.QtGui import QPixmap
+import os
+import sys
+from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, 
+                             QComboBox, QCalendarWidget, QSpinBox, QTextEdit, QPushButton, 
+                             QTableWidget, QHeaderView, QGroupBox, QStackedWidget, QRadioButton)
 from PyQt6.QtCore import Qt, QPropertyAnimation, QRect, QEasingCurve
+from PyQt6.QtGui import QPixmap
+def resource_path(relative_path):
+    """ Mencari path file di dalam folder sementara PyInstaller """
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 class AppTKAngkasaUI(QMainWindow):
     def __init__(self):
@@ -19,17 +29,22 @@ class AppTKAngkasaUI(QMainWindow):
         self.login_page = QWidget()
         layout = QVBoxLayout(self.login_page)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
         self.logo_label = QLabel()
-        pixmap = QPixmap("LOGO.png")
+
+        path_logo = resource_path("LOGO.png")
+        pixmap = QPixmap(path_logo)
+        
         if not pixmap.isNull():
             self.logo_label.setPixmap(pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio))
         else:
             self.logo_label.setText("LOGO TIDAK DITEMUKAN")
-        self.logo_label.setStyleSheet("color: red; font-weight: bold;")
+            self.logo_label.setStyleSheet("color: red; font-weight: bold;")
 
         self.logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.logo_label)
     
+        # Animasi Logo
         self.anim_logo = QPropertyAnimation(self.logo_label, b"geometry")
         self.anim_logo.setDuration(1200)
         self.anim_logo.setStartValue(QRect(625, 150, 0, 0)) 
